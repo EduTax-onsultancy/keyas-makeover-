@@ -343,37 +343,34 @@
 
             <!-- ১. আলাদা ফাইল কানেকশন (যেমন ছিল) -->
 <script src="config.js"></script>
-            <!-- ২. গ্যালারি তৈরি করার অটোমেটিক স্মার্ট মিক্স কোড -->
+
+<!-- ২. নতুন ছবি টপে দেখানোর সঠিক কোড -->
 <script>
     const container = document.getElementById('gallery-container');
-    let allImages = []; // সব ক্যাটাগরির ছবি একসাথে রাখার বক্স
+    let allImages = []; 
 
-    // ১. সব ছবিকে একটা লিস্টে আনা এবং তাদের 'Freshness Score' দেওয়া
+    // সব ছবি একসাথে করা
     for (const [category, count] of Object.entries(myGallery)) {
         for (let i = 1; i <= count; i++) {
-            allImages.push({
-                category: category,
-                id: i,
-                // ম্যাজিক ফর্মুলা: নতুন আপলোড করা ছবিগুলোর স্কোর সবসময় ১ (১০০%) হবে
-                score: i / count 
-            });
+            allImages.push({ category: category, id: i });
         }
     }
 
-    // ২. স্কোর অনুযায়ী সাজানো (সবচেয়ে নতুন ছবিগুলো আগে আসবে)
-    allImages.sort((a, b) => b.score - a.score);
+    // ম্যাজিক: যেকোনো ক্যাটাগরির সবচেয়ে বড় সংখ্যাটি (নতুন ছবি) সবার আগে আসবে
+    allImages.sort((a, b) => b.id - a.id);
 
-    // ৩. গ্যালারিতে সুন্দরভাবে শো করানো
+    // গ্যালারিতে দেখানো
     allImages.forEach(item => {
         let imgPath = `${folderName}/${item.category}-${item.id}.jpg`;
         let caption = item.category.charAt(0).toUpperCase() + item.category.slice(1) + " Makeup";
         
-        container.insertAdjacentHTML('beforeend', `
+        let html = `
         <div class="masonry-item gallery-item" data-category="${item.category}">
             <a href="${imgPath}" data-fancybox="gallery" data-caption="${caption}">
-                <img src="${imgPath}" class="gallery-img" alt="${caption}" onerror="this.onerror=null; this.closest('.masonry-item').style.display='none';">
+                <img src="${imgPath}" class="gallery-img" alt="${caption}">
             </a>
-        </div>`);
+        </div>`;
+        container.insertAdjacentHTML('beforeend', html);
     });
 </script>
             
