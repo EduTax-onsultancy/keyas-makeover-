@@ -341,25 +341,26 @@
             <!-- Masonry Grid with perfectly fitting images -->
             <div class="masonry" id="gallery-container"></div>
 
-        <!-- ১. আলাদা ফাইল কানেকশন (যেমন ছিল) -->
-<script src="config.js"></script>
+        <script src="config.js"></script>
+
 <script>
     const container = document.getElementById('gallery-container');
     let allImages = []; 
 
-    // ১. প্রতিটি ছবিকে একটি 'শতকরা স্কোর' দেওয়া
+    // ১. সব ছবিকে লিস্টে আনা এবং নতুন ছবি থেকে দূরত্ব মাপা
     for (const [category, count] of Object.entries(myGallery)) {
         for (let i = 1; i <= count; i++) {
             allImages.push({ 
                 category: category, 
                 id: i,
-                score: i / count // ম্যাজিক ফর্মুলা: শেষের ছবিগুলোর স্কোর সবচেয়ে বেশি (১) হবে
+                // ম্যাজিক: লেটেস্ট ছবির দূরত্ব ০, তার আগেরটির ১, তারপর ২...
+                distanceFromNewest: count - i 
             });
         }
     }
 
-    // ২. স্কোর অনুযায়ী সাজানো (সবচেয়ে নতুন ছবিগুলো আগে আসবে)
-    allImages.sort((a, b) => b.score - a.score);
+    // ২. দূরত্ব অনুযায়ী সাজানো (০ বা লেটেস্ট ছবিগুলো সবার আগে আসবে)
+    allImages.sort((a, b) => a.distanceFromNewest - b.distanceFromNewest);
 
     // ৩. গ্যালারিতে দেখানো
     allImages.forEach(item => {
@@ -374,7 +375,7 @@
         </div>`;
         container.insertAdjacentHTML('beforeend', html);
     });
-        </script>
+</script>
             
     </section>
 
