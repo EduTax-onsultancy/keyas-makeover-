@@ -341,24 +341,38 @@
             <!-- Masonry Grid with perfectly fitting images -->
             <div class="masonry" id="gallery-container"></div>
 
-<!-- এই লাইনটি আপনার ওই config.js ফাইলের সংখ্যাগুলোকে এখানে নিয়ে আসবে -->
-<script src="config.js"></script>
-
+<!-- ২. গ্যালারি তৈরি করার অটোমেটিক স্মার্ট মিক্স কোড -->
 <script>
     const container = document.getElementById('gallery-container');
+    let allImages = []; // সব ক্যাটাগরির ছবি একসাথে রাখার বক্স
+
+    // ১. সব ছবিকে একটা লিস্টে আনা এবং তাদের 'Freshness Score' দেওয়া
     for (const [category, count] of Object.entries(myGallery)) {
-        for (let i = count; i >= 1; i--) {
-            let imgPath = `${folderName}/${category}-${i}.jpg`;
-            let caption = category.charAt(0).toUpperCase() + category.slice(1) + " Makeup";
-            
-            container.insertAdjacentHTML('beforeend', `
-            <div class="masonry-item gallery-item" data-category="${category}">
-                <a href="${imgPath}" data-fancybox="gallery" data-caption="${caption}">
-                    <img src="${imgPath}" class="gallery-img" alt="${caption}" onerror="this.onerror=null; this.closest('.masonry-item').style.display='none';">
-                </a>
-            </div>`);
+        for (let i = 1; i <= count; i++) {
+            allImages.push({
+                category: category,
+                id: i,
+                // ম্যাজিক ফর্মুলা: নতুন আপলোড করা ছবিগুলোর স্কোর সবসময় ১ (১০০%) হবে
+                score: i / count 
+            });
         }
     }
+
+    // ২. স্কোর অনুযায়ী সাজানো (সবচেয়ে নতুন ছবিগুলো আগে আসবে)
+    allImages.sort((a, b) => b.score - a.score);
+
+    // ৩. গ্যালারিতে সুন্দরভাবে শো করানো
+    allImages.forEach(item => {
+        let imgPath = `${folderName}/${item.category}-${item.id}.jpg`;
+        let caption = item.category.charAt(0).toUpperCase() + item.category.slice(1) + " Makeup";
+        
+        container.insertAdjacentHTML('beforeend', `
+        <div class="masonry-item gallery-item" data-category="${item.category}">
+            <a href="${imgPath}" data-fancybox="gallery" data-caption="${caption}">
+                <img src="${imgPath}" class="gallery-img" alt="${caption}" onerror="this.onerror=null; this.closest('.masonry-item').style.display='none';">
+            </a>
+        </div>`);
+    });
 </script>
             
     </section>
