@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Keya's Makeover | Makeup Artist</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rosegold: '#b76e79', 
+                        blush: '#fdf2f8', 
+                    },
+                    fontFamily: {
+                        greatvibes: ['"Great Vibes"', 'cursive'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        heading: ['Lora', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; background-color: #fdf2f8; color: #1f2937; }
+        
+        .glass-header {
+            background: rgba(253, 242, 248, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(183, 110, 121, 0.15);
+        }
+
+        .service-box {
+            background: #ffffff;
+            border: 1px solid rgba(183, 110, 121, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        /* Updated Masonry Grid for perfectly fitting images */
+        .masonry {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        @media (min-width: 768px) { .masonry { grid-template-columns: repeat(3, 1fr); gap: 1rem; } }
+        @media (min-width: 1024px) { .masonry { grid-template-columns: repeat(4, 1fr); } }
+        
+        .masonry-item {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Ensures all uploaded photos fit perfectly inside the box without stretching */
+        .gallery-img {
+            width: 100%;
+            height: 220px; /* Fixed height for mobile */
+            border-radius: 8px;
+            object-fit: cover; /* Cropped perfectly */
+            object-position: top center; /* Focuses on the face */
+        }
+        @media (min-width: 768px) {
+            .gallery-img {
+                height: 280px; /* Taller height for desktop */
+            }
+        }
+
+        /* Form Inputs */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(183, 110, 121, 0.3);
+            border-radius: 8px;
+            background: #fff;
+            outline: none;
+            transition: border 0.3s ease;
+            font-size: 14px;
+        }
+        .form-input:focus {
+            border-color: #b76e79;
+            box-shadow: 0 0 0 2px rgba(183, 110, 121, 0.1);
+        }
+
+        /* Swiper Custom Styling */
+        .swiper-pagination-bullet { background: #fff; opacity: 0.6; }
+        .swiper-pagination-bullet-active { background: #b76e79; opacity: 1; }
+        .swiper-button-next::after, .swiper-button-prev::after { font-size: 20px !important; font-weight: bold; }
+    </style>
+</head>
+<body class="font-sans antialiased pt-16">
+
+    <!-- 1. Navbar -->
+    <header class="fixed w-full top-0 z-50 glass-header shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand Name -->
+                <a href="#" class="flex items-center gap-2">
+                    <img src="logo.png" style="width:40px; height:40px; object-fit:cover; border-radius:50%; border: 2px solid #b76e79;" alt="Logo" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=KM&background=b76e79&color=fff&rounded=true';">
+                    <span class="font-greatvibes text-3xl text-rosegold transform translate-y-1">Keya's Makeover</span>
+                </a>
+
+                <!-- Mobile Menu Button (Hamburger) -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-rosegold hover:text-gray-900 focus:outline-none text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#about" class="text-sm font-medium text-gray-700 hover:text-rosegold">About</a>
+                    <a href="#services" class="text-sm font-medium text-gray-700 hover:text-rosegold">Services</a>
+                    <a href="#portfolio" class="text-sm font-medium text-gray-700 hover:text-rosegold">Gallery</a>
+                    <a href="#booking" class="text-sm font-medium text-gray-700 hover:text-rosegold">Book Now</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-rose-100 shadow-lg absolute w-full left-0">
+            <div class="px-4 pt-2 pb-4 space-y-2 flex flex-col">
+                <a href="#about" class="mobile-link block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rosegold rounded-md">About</a>
+                <a href="#services" class="mobile-link block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rosegold rounded-md">Services</a>
+                <a href="#portfolio" class="mobile-link block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rosegold rounded-md">Gallery</a>
+                <a href="#booking" class="mobile-link block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rosegold rounded-md">Book Now</a>
+                <a href="#contact" class="mobile-link block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rosegold rounded-md">Enquiry</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Hero Banner (55vh) & Buttons -->
+    <section class="w-full bg-blush">
+        <!-- Swiper Slider -->
+        <div class="swiper mySwiper w-full h-[55vh]">
+            <div class="swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="swiper-slide relative w-full h-full">
+                    <img src="banner1.jpg" alt="Bridal Makeup" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=2071&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <h1 class="font-heading text-4xl md:text-5xl font-semibold text-white text-center px-4 drop-shadow-md">
+                            Enhancing Your <br> Natural Beauty
+                        </h1>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="swiper-slide relative w-full h-full">
+                    <img src="banner2.jpg" alt="Party Makeup" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=2000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <h1 class="font-heading text-4xl md:text-5xl font-semibold text-white text-center px-4 drop-shadow-md">
+                            Flawless Looks <br> For Every Occasion
+                        </h1>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="swiper-slide relative w-full h-full">
+                    <img src="banner3.jpg" alt="Elegant Hairstyles" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512413914421-eb4233c74c93?q=80&w=2000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <h1 class="font-heading text-4xl md:text-5xl font-semibold text-white text-center px-4 drop-shadow-md">
+                            Elegant Styles <br> Crafted For You
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <!-- Swiper Navigation Arrows -->
+            <div class="swiper-button-next text-white/80 hover:text-white drop-shadow-md"></div>
+            <div class="swiper-button-prev text-white/80 hover:text-white drop-shadow-md"></div>
+            <!-- Swiper Pagination Dots -->
+            <div class="swiper-pagination"></div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="max-w-md mx-auto px-4 py-5 flex justify-center gap-3">
+            <a href="#booking" class="flex-1 bg-rosegold text-white py-3 rounded-xl text-[13px] uppercase font-semibold text-center shadow-md hover:bg-gray-800 transition">
+                Book Now
+            </a>
+            <a href="#contact" class="flex-1 bg-white text-rosegold border border-rosegold py-3 rounded-xl text-[13px] uppercase font-semibold text-center shadow-sm hover:bg-rose-50 transition">
+                Enquiry now 
+            </a>
+        </div>
+    </section>
+
+    <!-- 3. About Section -->
+    <section id="about" class="py-8 px-5 text-center max-w-2xl mx-auto">
+        <h2 class="font-heading text-3xl font-semibold text-rosegold mb-3">About Us</h2>
+        <p class="text-gray-600 text-sm md:text-base font-light leading-relaxed">
+            Welcome to Keya's Makeover. We specialize in flawless, bespoke makeup artistry tailored to your unique features. Our goal is to make you feel incredibly confident and radiant on your most special days.
+        </p>
+    </section>
+    
+<!-- Highlights Section (Two 3D Light Boxes) -->
+<div class="flex justify-center gap-3 md:gap-5 mt-6 mb-6 px-3 w-full">
+    
+    <!-- Experience & Certified Box -->
+    <div class="flex items-center gap-2.5 bg-white px-3 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(183,110,121,0.2)] border border-pink-50 hover:shadow-[0_8px_20px_rgba(183,110,121,0.4)] hover:-translate-y-1 transition-all duration-300 cursor-default flex-1 max-w-[180px] justify-center" style="background: linear-gradient(145deg, #ffffff, #fdf5f5);">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shadow-sm shrink-0" style="background-color: #FCEAEA; color: #b76e79;">
+            <i class="fas fa-award text-sm"></i>
+        </div>
+        <div class="flex flex-col text-left">
+            <span class="font-bold text-[11px] sm:text-sm leading-tight" style="color: #444;">5+ Years Exp.</span>
+            <span class="text-[10px] sm:text-xs text-gray-500 font-medium leading-tight">Certified Artist</span>
+        </div>
+    </div>
+    
+    <!-- Happy Clients Box -->
+    <div class="flex items-center gap-2.5 bg-white px-3 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(183,110,121,0.2)] border border-pink-50 hover:shadow-[0_8px_20px_rgba(183,110,121,0.4)] hover:-translate-y-1 transition-all duration-300 cursor-default flex-1 max-w-[180px] justify-center" style="background: linear-gradient(145deg, #ffffff, #fdf5f5);">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shadow-sm shrink-0" style="background-color: #FCEAEA; color: #b76e79;">
+            <i class="fas fa-heart text-sm"></i>
+        </div>
+        <div class="flex flex-col text-left">
+            <span class="font-bold text-[11px] sm:text-sm leading-tight" style="color: #444;">100+</span>
+            <span class="text-[10px] sm:text-xs text-gray-500 font-medium leading-tight">Happy Clients</span>
+        </div>
+    </div>
+
+</div>
+    
+    <!-- 4. Meet the Artist -->
+    <section class="py-8 bg-white border-y border-rose-100">
+        <div class="text-center max-w-sm mx-auto px-4">
+            <h2 class="font-heading text-3xl font-semibold text-rosegold mb-5">Meet the Artist</h2>
+            <!-- Artist Image & Overlay -->
+            <div class="relative inline-block mb-8">
+                <img src="keya.jpg" alt="Meet Keya" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top rounded-2xl border-4 border-blush shadow-lg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=500&fit=crop';">
+                
+                <!-- Stylish Name Overlay Box -->
+                <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-rosegold text-white px-8 py-2 rounded-lg shadow-lg border-2 border-white">
+                    <span class="font-heading font-medium tracking-wide text-lg">Keya</span>
+                </div>
+            </div>
+            
+            <!-- Social Media Icons -->
+            <div class="flex justify-center gap-4 mt-2">
+    <!-- Facebook -->
+    <a href="https://www.facebook.com/keya.sk13" target="_blank" class="w-9 h-9 rounded-full bg-blush text-rosegold flex items-center justify-center hover:bg-rosegold hover:text-white transition shadow-sm">
+        <i class="fab fa-facebook-f text-sm"></i>
+    </a>
+    
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/keyask21" target="_blank" class="w-9 h-9 rounded-full bg-blush text-rosegold flex items-center justify-center hover:bg-rosegold hover:text-white transition shadow-sm">
+        <i class="fab fa-instagram text-sm"></i>
+    </a>
+    
+    <!-- WhatsApp -->
+    <a href="#" target="_blank" class="w-9 h-9 rounded-full bg-blush text-rosegold flex items-center justify-center hover:bg-rosegold hover:text-white transition shadow-sm">
+        <i class="fab fa-whatsapp text-sm"></i>
+    </a>
+         </div>
+        </div>
+    </section>
+
+    <!-- 5. Services Section -->
+    <section id="services" class="py-12 bg-blush">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="font-heading text-3xl font-semibold text-center text-rosegold mb-8">Our Services</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="service-box">
+                    <i class="fas fa-crown text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Bridal Makeup</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-glass-cheers text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Party Makeup</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-ring text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Engagement</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-sun text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Haldi Look</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-star text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Reception</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-spa text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Hairstyle</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-person-dress text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Saree Draping</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-camera-retro text-rosegold text-xl mb-2"></i>
+                    <h3 class="text-[11px] md:text-xs font-semibold text-gray-800 mb-2">Pre Wedding</h3>
+                    <a href="#booking" class="inline-block bg-rose-50 text-rosegold border border-rose-200 text-[10px] px-4 py-1 rounded-full uppercase font-medium hover:bg-rosegold hover:text-white">Book</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Portfolio / Gallery Section -->
+    <section id="portfolio" class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-heading text-3xl font-semibold text-center text-rosegold mb-6">Our Portfolio</h2>
+
+            <!-- Gallery Filter Bar (Navigation Style) -->
+            <div class="bg-blush border border-rose-100 rounded-xl shadow-sm p-4 mb-8 mx-auto max-w-2xl">
+                <div class="flex flex-wrap justify-center gap-2" id="gallery-filters">
+                    <button class="filter-btn active bg-rosegold text-white px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium shadow-sm transition" data-filter="all">All</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="bridal">Bridal</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="party">Party</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="engagement">Engagement</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="haldi">Haldi</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="reception">Reception</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="hairstyle">Hairstyle</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="saree">Saree</button>
+                    <button class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-1.5 rounded-full text-[11px] md:text-sm font-medium hover:border-rosegold transition" data-filter="prewedding">Pre-wedding</button>
+                </div>
+            </div>
+
+            <!-- Masonry Grid with perfectly fitting images -->
+            <div class="masonry" id="gallery-container"></div>
+            <script>
+    const myGallery = {
+        'bridal': 28,      // আপনার যতগুলো ছবি আছে, সেই সংখ্যা লিখবেন
+        'party': 21,       
+        'reception': 18    
+    };
+
+    const container = document.getElementById('gallery-container');
+    for (const [category, count] of Object.entries(myGallery)) {
+        
+        // ম্যাজিকটি এখানে: লুপটি এখন উল্টো দিক থেকে ঘুরবে (নতুন ছবি আগে আসবে)
+        for (let i = count; i >= 1; i--) {
+            
+            let imgName = `${category}-${i}.jpg`;
+            let caption = category.charAt(0).toUpperCase() + category.slice(1) + " Makeup";
+            
+            container.insertAdjacentHTML('beforeend', `
+            <div class="masonry-item gallery-item" data-category="${category}">
+                <a href="${imgName}" data-fancybox="gallery" data-caption="${caption}">
+                    <img src="${imgName}" class="gallery-img" alt="${caption}" onerror="this.onerror=null; this.closest('.masonry-item').style.display='none';">
+                </a>
+            </div>`);
+        }
+    }
+            </script>
+    </section>
+
+    <!-- Ratings & Reviews Section -->
+    <section id="reviews" class="py-12 bg-white border-t border-rose-100">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="font-heading text-3xl font-semibold text-center text-rosegold mb-2">Client Reviews</h2>
+            <p class="text-center text-gray-500 text-xs mb-8">See what our beautiful brides have to say.</p>
+            
+            <!-- Reviews Grid (Horizontal Scroll - Dynamic Container) -->
+            <div id="reviews-container" class="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar">
+                <!-- Fallback/Loading message -->
+                <div class="min-w-[260px] bg-blush p-5 rounded-2xl shadow-sm border border-rose-100 snap-center">
+                    <p class="text-xs text-gray-600 mb-3 italic">Loading reviews...</p>
+                </div>
+            </div>
+
+            <!-- Leave a Review Button -->
+            <div class="text-center mt-6">
+                <button onclick="document.getElementById('review-form').classList.toggle('hidden')" class="bg-white text-rosegold border border-rosegold px-6 py-2 rounded-full text-xs font-semibold uppercase hover:bg-rose-50 transition">
+                    Leave a Review
+                </button>
+            </div>
+
+            <!-- Hidden Review Form -->
+            <div id="review-form" class="hidden mt-4 bg-blush p-5 rounded-2xl border border-rose-100 max-w-md mx-auto">
+                <form id="reviewForm" class="space-y-3">
+                    <input type="hidden" name="type" value="review">
+                    <div>
+                        <input type="text" name="name" placeholder="Your Name" class="form-input" required>
+                    </div>
+                    <div>
+                        <select name="rating" class="form-input text-gray-600" required>
+                            <option value="">Select Rating</option>
+                            <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                            <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                            <option value="3">⭐⭐⭐ (3 Stars)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <textarea name="review" rows="3" placeholder="Share your experience..." class="form-input resize-none" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-rosegold text-white py-2 rounded-xl text-xs font-semibold uppercase hover:bg-gray-800 transition shadow-md">
+                        Submit Review
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Booking Form Section -->
+    <section id="booking" class="py-12 bg-blush">
+        <div class="max-w-xl mx-auto px-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-rose-100 p-6 md:p-8">
+                <h2 class="font-heading text-3xl font-semibold text-center text-rosegold mb-2">Book an Appointment</h2>
+                <p class="text-center text-gray-500 text-xs mb-6">Secure your date with Keya's Makeover.</p>
+                
+                <form id="bookingForm" class="space-y-4">
+                    <input type="hidden" name="type" value="booking">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" name="name" placeholder="Your Name" class="form-input" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Phone Number</label>
+                            <input type="tel" name="phone" placeholder="Your Phone" class="form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Event Date</label>
+                            <input type="date" name="date" class="form-input" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Service Type</label>
+                        <select name="service" class="form-input text-gray-600" required>
+                            <option value="">Select a service...</option>
+                            <option value="bridal">Bridal Makeup</option>
+                            <option value="party">Party Makeup</option>
+                            <option value="engagement">Engagement</option>
+                            <option value="haldi">Haldi Look</option>
+                            <option value="reception">Reception</option>
+                            <option value="hairstyle">Hairstyle</option>
+                            <option value="saree">Saree Draping</option>
+                            <option value="prewedding">Pre Wedding</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-rosegold text-white py-3 rounded-xl text-sm font-semibold uppercase tracking-wide hover:bg-gray-800 transition shadow-md mt-4">
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Enquiry / Contact Section -->
+    <section id="contact" class="py-12 bg-white border-t border-rose-100">
+        <div class="max-w-xl mx-auto px-4">
+            <h2 class="font-heading text-3xl font-semibold text-center text-rosegold mb-2">Have an Enquiry?</h2>
+            <p class="text-center text-gray-500 text-xs mb-8">Send us a message and we'll get back to you shortly.</p>
+            
+            <form id="enquiryForm" class="space-y-4">
+                <input type="hidden" name="type" value="enquiry">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Name</label>
+                    <input type="text" name="name" placeholder="Your Name" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Contact Details</label>
+                    <input type="text" name="contact" placeholder="Email or Phone number" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Message</label>
+                    <textarea name="message" rows="4" placeholder="How can we help you?" class="form-input resize-none" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-white text-rosegold border-2 border-rosegold py-3 rounded-xl text-sm font-semibold uppercase tracking-wide hover:bg-rose-50 transition shadow-sm mt-2">
+                    Send Enquiry
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <h3 class="font-greatvibes text-3xl mb-2 text-rose-100">Keya's Makeover</h3>
+            <p class="text-gray-400 text-xs font-light mb-4">Enhancing Your Natural Beauty</p>
+            <p class="text-[10px] text-gray-500">&copy; 2026 Keya's Makeover. All Rights Reserved.</p>
+        
+        </div>
+    </footer>
+
+    <!-- Fancybox, Swiper & Mobile Menu Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // 0. Initialize Swiper Slider
+        const swiper = new Swiper(".mySwiper", {
+            loop: true,
+            autoplay: {
+                delay: 3500, // 3.5 seconds
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+
+        // 1. Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 2. Initialize Fancybox
+        Fancybox.bind('[data-fancybox="gallery"]', {
+            Images: { zoom: true },
+            Toolbar: {
+                display: { left: ["infobar"], middle: ["zoomIn", "zoomOut"], right: ["close"] },
+            },
+        });
+
+        // 3. Filter Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-rosegold', 'text-white', 'shadow-sm');
+                    b.classList.add('bg-white', 'text-gray-600', 'border', 'border-gray-200');
+                });
+                
+                btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+                btn.classList.add('bg-rosegold', 'text-white', 'shadow-sm');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    const category = item.getAttribute('data-category');
+                    const anchor = item.querySelector('a');
+
+                    if (filterValue === 'all' || filterValue === category) {
+                        item.style.display = 'block';
+                        setTimeout(() => item.style.opacity = '1', 10);
+                        anchor.setAttribute('data-fancybox', 'gallery');
+                    } else {
+                        item.style.opacity = '0';
+                        setTimeout(() => item.style.display = 'none', 300);
+                        anchor.setAttribute('data-fancybox', '');
+                    }
+                });
+            });
+        });
+
+        // 4. GOOGLE SHEETS INTEGRATION
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXrrCod9ZhrrwCkLzUTrLbIH6NRgq2BB3x0_vs1cMm1lxcb3PuXoW-5Pdm1Wh7oH4gA/exec";
+
+        // Fetch & Show Reviews Dynamically
+        function fetchReviews() {
+            fetch(SCRIPT_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('reviews-container');
+                    if (data && data.length > 0) {
+                        container.innerHTML = ''; // Clear loading text
+                        data.forEach(item => {
+                            let starsHtml = '';
+                            const rating = parseInt(item.rating) || 5; 
+                            for (let i = 0; i < rating; i++) {
+                                starsHtml += '<i class="fas fa-star"></i>';
+                            }
+                            const reviewCard = `
+                                <div class="min-w-[260px] bg-blush p-5 rounded-2xl shadow-sm border border-rose-100 snap-center">
+                                    <div class="flex text-rosegold text-xs mb-2">${starsHtml}</div>
+                                    <p class="text-xs text-gray-600 mb-3 italic">"${item.review}"</p>
+                                    <h4 class="text-sm font-semibold text-gray-800">- ${item.name}</h4>
+                                </div>
+                            `;
+                            container.innerHTML += reviewCard;
+                        });
+                    } else {
+                        container.innerHTML = `<p class="text-xs text-gray-600">No reviews yet. Be the first to leave one!</p>`;
+                    }
+                })
+                .catch(error => console.error("Error loading reviews:", error));
+        }
+
+        // Handle Generic Form Submit
+        function handleFormSubmit(formId) {
+            const form = document.getElementById(formId);
+            if(form) {
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault(); 
+                    
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    const originalText = submitButton.innerText;
+                    submitButton.innerText = "Sending..."; 
+                    
+                    const formData = new FormData(form);
+
+                    fetch(SCRIPT_URL, {
+                        method: "POST",
+                        body: formData,
+                    })
+                    .then(response => {
+                        alert("Success! Your request has been successfully submitted."); 
+                        form.reset(); 
+                        submitButton.innerText = originalText;
+                        
+                        if(formId === 'reviewForm') {
+                            document.getElementById('review-form').classList.add('hidden');
+                            fetchReviews();
+                        }
+                    })
+                    .catch(error => {
+                        alert("Error: Something went wrong. Please try again.");
+                        submitButton.innerText = originalText;
+                    });
+                });
+            }
+        }
+
+        // Initialize features
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchReviews();
+            handleFormSubmit("bookingForm");
+            handleFormSubmit("enquiryForm");
+            handleFormSubmit("reviewForm");
+        });
+    </script> 
+</body>
+</html>
