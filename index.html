@@ -340,22 +340,14 @@
 
             <!-- Masonry Grid with perfectly fitting images -->
             <div class="masonry" id="gallery-container"></div>
-            <script>
-    const myGallery = {
-        'bridal': 28,      
-        'party': 21,       
-        'reception': 18    
-    };
 
-    // আপনার ফোল্ডারের নাম এখানে দেবেন (যেমন: photos)
-    const folderName = 'photos'; 
+<!-- এই লাইনটি আপনার ওই config.js ফাইলের সংখ্যাগুলোকে এখানে নিয়ে আসবে -->
+<script src="config.js"></script>
 
+<script>
     const container = document.getElementById('gallery-container');
-    
     for (const [category, count] of Object.entries(myGallery)) {
         for (let i = count; i >= 1; i--) {
-            
-            // এখন কোড নিজে থেকেই ফোল্ডারের নাম যুক্ত করে নেবে
             let imgPath = `${folderName}/${category}-${i}.jpg`;
             let caption = category.charAt(0).toUpperCase() + category.slice(1) + " Makeup";
             
@@ -367,7 +359,8 @@
             </div>`);
         }
     }
-        </script>
+</script>
+            
     </section>
 
     <!-- Ratings & Reviews Section -->
