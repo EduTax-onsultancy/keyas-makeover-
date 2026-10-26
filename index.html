@@ -115,7 +115,7 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo and Brand Name -->
                 <a href="#" class="flex items-center gap-2">
-                    <img src="logo.png" style="width:40px; height:40px; object-fit:cover; border-radius:50%; border: 2px solid #b76e79;" alt="Logo" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=KM&background=b76e79&color=fff&rounded=true';">
+                    <img src="photos/logo.png" style="width:40px; height:40px; object-fit:cover; border-radius:50%; border: 2px solid #b76e79;" alt="Logo" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=KM&background=b76e79&color=fff&rounded=true';">
                     <span class="font-greatvibes text-3xl text-rosegold transform translate-y-1">Keya's Makeover</span>
                 </a>
 
@@ -155,7 +155,7 @@
             <div class="swiper-wrapper">
                 <!-- Slide 1 -->
                 <div class="swiper-slide relative w-full h-full">
-                    <img src="banner1.jpg" alt="Bridal Makeup" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=2071&auto=format&fit=crop';">
+                    <img src="photos/banner1.jpg" alt="Bridal Makeup" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=2071&auto=format&fit=crop';">
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <h1 class="font-heading text-4xl md:text-5xl font-semibold text-white text-center px-4 drop-shadow-md">
                             Enhancing Your <br> Natural Beauty
@@ -164,7 +164,7 @@
                 </div>
                 <!-- Slide 2 -->
                 <div class="swiper-slide relative w-full h-full">
-                    <img src="banner2.jpg" alt="Party Makeup" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=2000&auto=format&fit=crop';">
+                    <img src="photos/banner2.jpg" alt="Party Makeup" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=2000&auto=format&fit=crop';">
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <h1 class="font-heading text-4xl md:text-5xl font-semibold text-white text-center px-4 drop-shadow-md">
                             Flawless Looks <br> For Every Occasion
@@ -173,7 +173,7 @@
                 </div>
                 <!-- Slide 3 -->
                 <div class="swiper-slide relative w-full h-full">
-                    <img src="banner3.jpg" alt="Elegant Hairstyles" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512413914421-eb4233c74c93?q=80&w=2000&auto=format&fit=crop';">
+                    <img src="photos/banner3.jpg" alt="Elegant Hairstyles" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512413914421-eb4233c74c93?q=80&w=2000&auto=format&fit=crop';">
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <h1 class="font-heading text-4xl md:text-5xl font-semibold text-white text-center px-4 drop-shadow-md">
                             Elegant Styles <br> Crafted For You
@@ -240,7 +240,7 @@
             <h2 class="font-heading text-3xl font-semibold text-rosegold mb-5">Meet the Artist</h2>
             <!-- Artist Image & Overlay -->
             <div class="relative inline-block mb-8">
-                <img src="keya.jpg" alt="Meet Keya" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top rounded-2xl border-4 border-blush shadow-lg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=500&fit=crop';">
+                <img src="photos/keya.jpg" alt="Meet Keya" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top rounded-2xl border-4 border-blush shadow-lg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=500&fit=crop';">
                 
                 <!-- Stylish Name Overlay Box -->
                 <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-rosegold text-white px-8 py-2 rounded-lg shadow-lg border-2 border-white">
@@ -342,29 +342,32 @@
             <div class="masonry" id="gallery-container"></div>
             <script>
     const myGallery = {
-        'bridal': 28,      // আপনার যতগুলো ছবি আছে, সেই সংখ্যা লিখবেন
+        'bridal': 28,      
         'party': 21,       
         'reception': 18    
     };
 
+    // আপনার ফোল্ডারের নাম এখানে দেবেন (যেমন: photos)
+    const folderName = 'photos'; 
+
     const container = document.getElementById('gallery-container');
+    
     for (const [category, count] of Object.entries(myGallery)) {
-        
-        // ম্যাজিকটি এখানে: লুপটি এখন উল্টো দিক থেকে ঘুরবে (নতুন ছবি আগে আসবে)
         for (let i = count; i >= 1; i--) {
             
-            let imgName = `${category}-${i}.jpg`;
+            // এখন কোড নিজে থেকেই ফোল্ডারের নাম যুক্ত করে নেবে
+            let imgPath = `${folderName}/${category}-${i}.jpg`;
             let caption = category.charAt(0).toUpperCase() + category.slice(1) + " Makeup";
             
             container.insertAdjacentHTML('beforeend', `
             <div class="masonry-item gallery-item" data-category="${category}">
-                <a href="${imgName}" data-fancybox="gallery" data-caption="${caption}">
-                    <img src="${imgName}" class="gallery-img" alt="${caption}" onerror="this.onerror=null; this.closest('.masonry-item').style.display='none';">
+                <a href="${imgPath}" data-fancybox="gallery" data-caption="${caption}">
+                    <img src="${imgPath}" class="gallery-img" alt="${caption}" onerror="this.onerror=null; this.closest('.masonry-item').style.display='none';">
                 </a>
             </div>`);
         }
     }
-            </script>
+        </script>
     </section>
 
     <!-- Ratings & Reviews Section -->
