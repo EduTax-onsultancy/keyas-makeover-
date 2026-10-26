@@ -1,6 +1,6 @@
 const myGallery = {
-    'bridal': 22,      
-    'party': 17,       
+    'bridal': 28,      
+    'party': 21,       
     'reception': 18    
 };
 const folderName = 'photos';
