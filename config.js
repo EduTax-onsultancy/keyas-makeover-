@@ -1,6 +1,6 @@
 const myGallery = {
     'bridal': 28,      
-    'party': 22,       
+    'party': 21,       
     'reception': 20, 
       'hairstyle': 0,
 };
